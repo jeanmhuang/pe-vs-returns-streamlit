@@ -8,6 +8,9 @@ st.title("📈 Market Pulse: Stock Dashboard")
 ticker = st.sidebar.selectbox("Choose a stock", ["AAPL", "MSFT", "GOOG", "AMZN", "NVDA", "TSLA", "JPM", "XOM", "WMT", "JNJ"])
 
 data = yf.download(ticker, period="1y")
+if isinstance(data.columns, pd.MultiIndex):
+    data.columns = data.columns.get_level_values(0)  # 🔧 flatten column names
+
 info = yf.Ticker(ticker).info
 
 st.subheader(f"{ticker} Price Chart (1 Year)")
