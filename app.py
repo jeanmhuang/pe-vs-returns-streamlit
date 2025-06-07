@@ -1,6 +1,7 @@
 import streamlit as st
 import yfinance as yf
 import plotly.express as px
+import pandas as pd  # ✅ You need this
 
 st.set_page_config(page_title="Market Pulse", layout="wide")
 st.title("📈 Market Pulse: Stock Dashboard")
@@ -8,8 +9,10 @@ st.title("📈 Market Pulse: Stock Dashboard")
 ticker = st.sidebar.selectbox("Choose a stock", ["AAPL", "MSFT", "GOOG", "AMZN", "NVDA", "TSLA", "JPM", "XOM", "WMT", "JNJ"])
 
 data = yf.download(ticker, period="1y")
+
+# 🔧 Fix MultiIndex column issue
 if isinstance(data.columns, pd.MultiIndex):
-    data.columns = data.columns.get_level_values(0)  # 🔧 flatten column names
+    data.columns = data.columns.get_level_values(0)
 
 info = yf.Ticker(ticker).info
 
